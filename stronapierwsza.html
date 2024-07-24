@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management Tool</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Set semi-transparent background for the container */
+        .container {
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black color */
+            width: 80%;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10px; /* Rounded corners for the container */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Set different color for the task name */
+        .task span {
+            color: #3498db;
+        }
+
+        /* Hover effect for container */
+        .container:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Set styles for the heading */
+        h1 {
+            color: #2980b9;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Set styles for paragraphs */
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        /* Set styles for the task list container */
+        .task-list {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        /* Set styles for individual tasks */
+
+
+        /* Hover effect for tasks */
+
+
+        /* Remove bottom margin for last task */
+
+
+        /* Set styles for task buttons */
+        .task-buttons {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .task-buttons .task-done-checkbox + button {
+            color: #3498db;
+        }
+
+
+        /* Set styles for buttons and checkboxes inside task buttons */
+        .task-buttons button, .task-buttons input[type="checkbox"] {
+            background-color: transparent;
+            color: #95a5a6;
+            border: none;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        /* Hover effect for task buttons */
+        .task-buttons button:hover, .task-buttons input[type="checkbox"]:hover {
+            color: #bdc3c7;
+        }
+
+        /* Set styles for the add task button */
+        .add-task-button {
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            width: 100px; /* Set width and height to be equal */
+            height: 100px; /* Set width and height to be equal */
+            border-radius: 50%;
+            font-size: 36px;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+
+        /* Hover effect for add task button */
+        .add-task-button:hover {
+            background-color: #27ae60;
+        }
+
+        /* Set styles for task name input */
+        .task input[type="text"] {
+            display: none;
+            width: 70%;
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        /* Display task name input when active */
+
+
+        /* Set styles for priority select */
+        .priority-select {
+            width: 100px;
+            margin-left: auto;
+        }
+
+        /* Set styles for task date */
+        .task-date {
+            font-size: 0.8em;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+
+        /* Set styles for search container */
+        .search-container {
+            margin-top: 20px;
+        }
+
+        /* Set styles for search input */
+        .search-container input[type="text"] {
+            padding: 8px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            transition: box-shadow 0.3s ease;
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+
+        /* Hover effect for search input */
+        .search-container input[type="text"]:hover {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Set styles for search button */
+        .search-container button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for search button */
+        .search-container button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Task Management Tool</h1>
+    <p>Plan, organize, and manage your tasks with this simple to use website!</p>
+
+    <div class="task-list" id="taskList">
+        <!-- Tasks will be dynamically added here -->
+    </div>
+
+    <button class="add-task-button" id="addTaskBtn">+</button>
+    <div>
+        Sort by:
+        <select id="sortOption">
+            <option value="name">Name</option>
+            <option value="priority">Priority</option>
+            <option value="date">Date</option>
+        </select>
+        <button id="sortBtn">Sort</button>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for tasks...">
+        <button id="searchBtn">Search</button>
+    </div>
+</div>
+
+<script>
+    // JavaScript for adding tasks dynamically
+    const taskList = document.getElementById('taskList');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    const sortBtn = document.getElementById('sortBtn');
+    const sortOption = document.getElementById('sortOption');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    let taskId = 1;
+
+    // Event listener for adding a new task
+    addTaskBtn.addEventListener('click', () => {
+        const task = document.createElement('div');
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+        task.classList.add('task');
+        task.innerHTML = `
+            <span>Task ${taskId}</span>
+            <div class="task-date">Created at ${dateStr}</div>
+            <div class="task-description"></div>
+            <input type="text" placeholder="Enter task name" class="task-name-input">
+            <input type="text" placeholder="Enter task description" class="task-description-input">
+            <div class="task-buttons">
+                <button class="edit-btn">Edit</button>
+                <input type="checkbox" class="task-done-checkbox"> Done
+                <button class="delete-btn">Delete</button>
+                <select class="priority-select">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+        `;
+        taskList.appendChild(task);
+        taskId++;
+    });
+
+    // Add animations for hovering over task buttons
+    const taskButtons = document.querySelectorAll('.task-buttons button, .task-buttons input[type="checkbox"]');
+    taskButtons.forEach(button => {
+        button.addEventListener('mouseover', () => {
+            button.style.transform = 'scale(1.1)';
+            button.style.transition = 'transform 0.3s ease';
+        });
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'scale(1)';
+        });
+    });
+
+    // Event listener for editing a task
+    taskList.addEventListener('click', event => {
+        if (event.target.classList.contains('edit-btn')) {
+            const editBtn = event.target;
+            const task = editBtn.closest('.task');
+            const taskNameSpan = task.querySelector('span');
+            const taskNameInput = task.querySelector('.task-name-input');
+            const taskDescriptionInput = task.querySelector('.task-description-input');
+            const taskDescription = task.querySelector('.task-description');
+
+            if (editBtn.innerText === 'Edit') {
+                editBtn.innerText = 'Save';
+                taskNameInput.value = taskNameSpan.innerText;
+                taskNameSpan.style.display = 'none';
+                taskNameInput.style.display = 'inline-block';
+                taskDescriptionInput.disabled = false;
+                taskDescriptionInput.style.display = 'inline-block';
+                taskDescription.style.display = 'none';
+                taskDescriptionInput.value = taskDescription.innerText;
+                taskDescriptionInput.focus();
+            } else {
+                editBtn.innerText = 'Edit';
+                taskNameSpan.innerText = taskNameInput.value;
+                taskNameSpan.style.display = 'inline-block';
+                taskNameInput.style.display = 'none';
+                taskDescription.innerText = taskDescriptionInput.value;
+                taskDescription.style.display = 'block';
+                taskDescriptionInput.disabled = true;
+                taskDescriptionInput.style.display = 'none';
+
+                // Update the task name and description in localStorage
+                saveTasks();
+            }
+        }
+    });
+
+    // Event listener for marking a task as done
+    taskList.addEventListener('change', event => {
+        if (event.target.classList.contains('task-done-checkbox')) {
+            const checkbox = event.target;
+            const task = checkbox.closest('.task');
+            if (checkbox.checked) {
+                task.style.textDecoration = 'line-through';
+            } else {
+                task.style.textDecoration = 'none';
+            }
+            saveTasks(); // Save tasks after marking as done s
+        }
+    });
+
+    // Event listener for deleting a task
+    taskList.addEventListener('click', event => {
+        if (event.target.classList.contains('delete-btn')) {
+            // Remove the task's parent element, which is the task itself
+            event.target.closest('.task').remove();
+            // Save tasks after deletion
+            saveTasks();
+        }
+    });
+
+    // Event listener for sorting tasks
+    sortBtn.addEventListener('click', () => {
+        const tasks = Array.from(taskList.children);
+        const sortBy = sortOption.value;
+
+        if (sortBy === 'priority') {
+            tasks.sort((a, b) => {
+                const priorityA = a.querySelector('.priority-select').value;
+                const priorityB = b.querySelector('.priority-select').value;
+
+                // Assign numerical values to priorities for comparison
+                const priorityValues = { 'low': 3, 'medium': 2, 'high': 1 };
+
+                // Compare the numerical values of priorities
+                return priorityValues[priorityA] - priorityValues[priorityB];
+            });
+        } else if (sortBy === 'name') {
+            tasks.sort((a, b) => {
+                const nameA = a.querySelector('span').innerText;
+                const nameB = b.querySelector('span').innerText;
+                return nameA.localeCompare(nameB);
+            });
+        } else if (sortBy === 'date') {
+            tasks.sort((a, b) => {
+                const dateA = new Date(a.querySelector('.task-date').innerText.replace('Created at ', ''));
+                const dateB = new Date(b.querySelector('.task-date').innerText.replace('Created at ', ''));
+                return dateA - dateB;
+            });
+        }
+
+        taskList.innerHTML = '';
+        tasks.forEach(task => {
+            taskList.appendChild(task);
+        });
+
+        // Save tasks after sorting
+        saveTasks();
+    });
+
+    // Event listener for searching tasks
+    searchBtn.addEventListener('click', () => {
+        const searchText = searchInput.value.toLowerCase();
+        const tasks = Array.from(taskList.children);
+
+        tasks.forEach(task => {
+            const taskName = task.querySelector('span').innerText.toLowerCase();
+            if (taskName.includes(searchText)) {
+                task.style.display = 'block';
+            } else {
+                task.style.display = 'none';
+            }
+        });
+    });
+
+    // Function to save tasks to localStorage
+    function saveTasks() {
+        const tasks = Array.from(taskList.children);
+        const tasksData = tasks.map(task => {
+            const name = task.querySelector('span').innerText;
+            const description = task.querySelector('.task-description-input').value;
+            const priority = task.querySelector('.priority-select').value;
+            const date = task.querySelector('.task-date').innerText.replace('Created at ', ''); // Extract date from the displayed string
+            const done = task.querySelector('.task-done-checkbox').checked; // Check if task is done
+            return { name, description, priority, date, done }; // Include done status in task data
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasksData));
+    }
+
+    // Function to load tasks from localStorage
+    function loadTasks() {
+        const tasksData = JSON.parse(localStorage.getItem('tasks'));
+        if (tasksData) {
+            tasksData.forEach(taskData => {
+                const task = document.createElement('div');
+                task.classList.add('task');
+                task.innerHTML = `
+                <span>${taskData.name}</span>
+                <div class="task-date">Created at ${taskData.date}</div>
+                <div class="task-description">${taskData.description}</div>
+                <input type="text" placeholder="Enter task name" class="task-name-input">
+                <input type="text" placeholder="Enter task description" class="task-description-input" disabled>
+                <div class="task-buttons">
+                    <button class="edit-btn">Edit</button>
+                    <input type="checkbox" class="task-done-checkbox"> Done
+                    <button class="delete-btn">Delete</button>
+                    <select class="priority-select">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            `;
+                const prioritySelect = task.querySelector('.priority-select');
+                const doneCheckbox = task.querySelector('.task-done-checkbox');
+
+                prioritySelect.value = taskData.priority;
+                doneCheckbox.checked = taskData.done; // Set the checked status based on saved data
+                if (taskData.done) {
+                    task.style.textDecoration = 'line-through'; // Set decoration if task is done
+                }
+                taskList.appendChild(task);
+            });
+        }
+    }
+
+    // Load tasks when the window is loaded
+    window.addEventListener('load', loadTasks);
+
+    // Save tasks when a new task is added
+    addTaskBtn.addEventListener('click', () => {
+        saveTasks();
+    });
+
+    // Save tasks when tasks are sorted
+    sortBtn.addEventListener('click', () => {
+        saveTasks();
+    });
+</script>
