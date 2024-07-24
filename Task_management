@@ -322,7 +322,7 @@
     // Event listener for deleting a task
     taskList.addEventListener('click', event => {
         if (event.target.classList.contains('delete-btn')) {
-            // Remove the task's parent element, which is the task itself
+            // Remove the task's parent element, which is the task itself ss
             event.target.closest('.task').remove();
             // Save tasks after deletion
             saveTasks();
